@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<title>Контент-центр</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23171717'/%3E%3Ctext x='32' y='44' font-family='Arial' font-weight='700' font-size='34' fill='%23FF5A1F' text-anchor='middle'%3EИ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F1EC;--ink:#171717;--card:#FFFFFF;--line:#D5D0C8;--muted:#625F59;
+  --or:#FF5A1F;--or-d:#A92F00;--or-l:#FF7A47;
+  --done:#116B3B;--done-bg:#E1F4E8;--done-card:#EDF8F1;--done-line:#84BD9B;
+  --plan:#A45A00;--plan-bg:#FFF1D6;--plan-line:#D79B4D;
+  --moved:#6B45B5;--moved-bg:#EFE8FF;--moved-line:#AD93DC;
+  --light:#FFF8E9;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.45 Inter,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+.top{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff}
+.top-in{max-width:1420px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.brand{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.brand b{color:var(--or-l)}
+.counters{display:flex;gap:14px;font-size:13px;color:#cfcac2;flex-wrap:wrap}
+.counters span b{color:#fff;font-weight:600}
+.sync{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:#cfcac2}
+.dot{width:8px;height:8px;border-radius:50%;background:#8a8580;display:inline-block}
+.dot.on{background:#4ED08A}
+.btn{border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:10px;padding:8px 14px;font-weight:600;font-size:14px;cursor:pointer}
+.btn:hover{background:#f0ece6}
+.btn.primary{background:var(--or);border-color:var(--or-d);color:#fff}
+.btn.primary:hover{background:#ec4e15}
+.top .btn{background:transparent;color:#fff;border-color:#4a4744;padding:6px 12px;font-size:13px}
+.top .btn:hover{background:#262626}
+main{max-width:1420px;margin:0 auto;padding:28px}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+h1{font-size:clamp(34px,5vw,62px);line-height:.97;letter-spacing:-.035em;margin:10px 0 14px;font-weight:600}
+.lead{max-width:640px;color:var(--muted);margin:0 0 14px}
+.rules{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
+.rule{font-size:13px;border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:#fff}
+.weeks{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:26px}
+.week{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+.week .r{font-size:12px;color:var(--or-d);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.week h3{margin:4px 0 4px;font-size:18px;font-weight:600}
+.week p{margin:0;font-size:14px;color:var(--muted)}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.toolbar select{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;font-size:14px}
+.toolbar .sp{flex:1}
+.legend{display:flex;gap:12px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.wd{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:6px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:0 4px}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.day{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px;min-height:205px;display:flex;flex-direction:column;gap:8px;cursor:pointer;text-align:left;transition:transform .15s,box-shadow .15s,border-color .15s}
+.day:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(23,23,23,.12);border-color:#b8b2a8}
+.day:focus-visible{outline:3px solid var(--or);outline-offset:2px}
+.day.main{border:2px solid var(--or)}
+.day.light{background:var(--light)}
+.day.complete{background:var(--done-card);border-color:var(--done-line)}
+.day.empty{background:transparent;border-style:dashed;cursor:default;min-height:0;opacity:.55}
+.day.empty:hover{transform:none;box-shadow:none}
+.day.today{box-shadow:0 0 0 3px var(--ink)}
+.day.dim{opacity:.35}
+.dh{display:flex;align-items:baseline;gap:8px}
+.dn{font-size:19px;font-weight:600;white-space:nowrap}
+.dn small{font-size:13px;font-weight:500;color:var(--muted);margin-left:2px}
+.dw{font-size:13px;color:var(--muted);margin-top:-6px}
+.dtype{margin-left:auto;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--or-d)}
+.light .dtype{color:var(--muted)}
+.note{font-size:14px;line-height:1.35}
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto}
+.chip{font-size:11px;font-weight:600;border-radius:6px;padding:2px 7px;white-space:nowrap}
+.p-ig{color:#A51650;background:#FFE0EC}
+.p-threads{color:#fff;background:#262626}
+.p-tg{color:#004D78;background:#D6EFFF}
+.p-profile{color:var(--ink);background:#ECE7DF}
+.prog{font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.bar{flex:1;height:4px;border-radius:4px;background:#ECE7DF;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--done)}
+.mv{color:var(--moved);font-weight:600}
+.ideas{margin-top:40px}
+.ideas h2{font-size:28px;letter-spacing:-.02em;margin:0 0 14px;font-weight:600}
+.igrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.idea{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+.idea h4{margin:0 0 4px;font-size:16px;font-weight:600}
+.idea .st{font-size:12px;color:var(--or-d);font-weight:600}
+.idea p{margin:6px 0 0;font-size:14px;color:var(--muted)}
+/* panel */
+.ov{position:fixed;inset:0;background:rgba(14,14,14,.6);z-index:40;display:none}
+.ov.open{display:block}
+.panel{position:fixed;top:0;right:0;height:100%;width:min(760px,100%);background:var(--bg);z-index:41;transform:translateX(100%);transition:transform .25s ease;display:flex;flex-direction:column}
+.panel.open{transform:none}
+.ph{display:flex;align-items:flex-start;gap:12px;padding:24px 24px 12px}
+.ph h2{margin:0;font-size:30px;letter-spacing:-.02em;line-height:1.05;font-weight:600}
+.ph p{margin:6px 0 0;color:var(--muted);font-size:15px}
+.x{margin-left:auto;width:44px;height:44px;flex:none;border:2px solid var(--ink);border-radius:12px;background:#fff;cursor:pointer;font-size:22px;line-height:1}
+.ptabs{display:flex;gap:6px;padding:0 24px 12px;flex-wrap:wrap}
+.ptab{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer}
+.ptab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pb{overflow:auto;padding:0 24px 40px;flex:1}
+.item{background:#fff;border:1px solid var(--line);border-radius:17px;padding:17px;margin-bottom:12px}
+.item.done{background:var(--done-card);border-color:var(--done-line)}
+.item.moved{background:var(--moved-bg);border-color:var(--moved-line)}
+.im{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.item h3{margin:8px 0 4px;font-size:20px;line-height:1.2;font-weight:600}
+.goal{font-size:13px;color:var(--or-d);font-weight:500}
+.badge{margin-left:auto;font-size:12px;font-weight:600;border-radius:6px;padding:2px 8px;border:1px solid}
+.b-plan{color:var(--plan);background:var(--plan-bg);border-color:var(--plan-line)}
+.b-done{color:var(--done);background:var(--done-bg);border-color:var(--done-line)}
+.b-moved{color:var(--moved);background:var(--moved-bg);border-color:var(--moved-line)}
+details{margin-top:10px;background:var(--bg);border-radius:12px;padding:10px 14px}
+summary{cursor:pointer;font-weight:600;font-size:14px}
+.txt{white-space:pre-wrap;font-size:15px;margin:10px 0 0}
+.notes{font-size:14px;color:var(--muted);margin-top:10px;white-space:pre-wrap;border-left:3px solid var(--or);padding-left:10px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.acts .btn{font-size:13px;padding:7px 12px}
+.acts .btn.sel-done{background:var(--done);border-color:var(--done);color:#fff}
+.acts .btn.sel-moved{background:var(--moved);border-color:var(--moved);color:#fff}
+.acts .btn.sel-plan{background:var(--plan-bg);border-color:var(--plan)}
+.mini{font-size:13px;color:var(--muted);text-decoration:underline;cursor:pointer;background:none;border:0;padding:0}
+a{color:var(--or-d)}
+/* dialog */
+dialog{border:0;border-radius:20px;padding:0;max-width:560px;width:calc(100% - 28px);background:var(--bg);color:var(--ink)}
+dialog::backdrop{background:rgba(14,14,14,.6)}
+.dg{padding:24px}
+.dg h2{margin:0 0 8px;font-size:24px}
+.dg ol{padding-left:18px;font-size:14px;color:var(--muted)}
+.dg label{display:block;font-size:13px;font-weight:600;margin:12px 0 6px}
+.dg input{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:#fff}
+.dg .row{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:.2s;z-index:60;pointer-events:none;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.toast.err{background:#B42318}
+.banner{background:var(--plan-bg);border:1px solid var(--plan-line);border-radius:14px;padding:10px 14px;font-size:14px;margin-bottom:16px;display:none}
+.banner.show{display:block}
+@media (max-width:1100px){.grid,.wd{grid-template-columns:repeat(4,1fr)}.wd{display:none}.day{min-height:185px}.weeks,.igrid{grid-template-columns:1fr 1fr}}
+@media (max-width:720px){.top{position:static}main{padding:18px 14px}.top-in{padding:12px 14px}.grid{grid-template-columns:1fr 1fr}.day{min-height:175px}.weeks,.igrid{grid-template-columns:1fr}.ph{padding:18px 14px 10px}.ptabs{padding:0 14px 10px}.pb{padding:0 14px 30px}.sync{margin-left:0}}
+@media (max-width:440px){.grid{grid-template-columns:1fr}.day{min-height:0}.day.empty{display:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <div class="brand">Контент-центр <b>Ирины</b></div>
+  <div class="counters" id="counters"></div>
+  <div class="sync"><span class="dot" id="sdot"></span><span id="stext">Загрузка…</span><button class="btn" id="setBtn">Синхронизация</button></div>
+</div></header>
+
+<main>
+  <div class="eyebrow">Календарь публикаций · Новосибирск UTC+7</div>
+  <h1>Контент по дням</h1>
+  <p class="lead">Нажми на день — внутри площадки, тексты, сценарии и отметки «выставлено» / «перенести».</p>
+  <div class="rules"><span class="rule">Основные дни — оранжевой рамкой</span><span class="rule">Выходные — лайтово</span><span class="rule">Личная сторис всегда в паре с рабочей</span><span class="rule">Отмечаем только то, что реально вышло</span></div>
+  <div class="banner" id="banner">Отметки сейчас сохраняются только на этом устройстве. Подключи синхронизацию (кнопка вверху), чтобы видеть их везде.</div>
+  <div class="weeks" id="weeks"></div>
+  <div class="toolbar">
+    <select id="fPlat" aria-label="Площадка">
+      <option value="">Все площадки</option><option value="ig">Instagram</option><option value="ig-reels">Только рилсы</option><option value="tg">Telegram</option><option value="threads">Threads</option><option value="profile">Задачи по профилю</option>
+    </select>
+    <select id="fStat" aria-label="Статус">
+      <option value="">Все статусы</option><option value="plan">Запланировано</option><option value="done">Опубликовано</option><option value="moved">Перенести</option>
+    </select>
+    <span class="sp"></span>
+    <div class="legend"><span><i style="background:var(--plan-bg);border:1px solid var(--plan-line)"></i>Запланировано</span><span><i style="background:var(--done-bg);border:1px solid var(--done-line)"></i>Опубликовано</span><span><i style="background:var(--moved-bg);border:1px solid var(--moved-line)"></i>Перенести</span></div>
+  </div>
+  <div class="wd"><div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div></div>
+  <div class="grid" id="grid"></div>
+  <section class="ideas"><h2>Банк идей</h2><div class="igrid" id="ideas"></div></section>
+</main>
+
+<div class="ov" id="ov"></div>
+<aside class="panel" id="panel" aria-hidden="true" role="dialog" aria-label="День">
+  <div class="ph"><div><div class="eyebrow" id="pEy"></div><h2 id="pT"></h2><p id="pN"></p></div><button class="x" id="pX" aria-label="Закрыть">×</button></div>
+  <div class="ptabs" id="pTabs"></div>
+  <div class="pb" id="pB"></div>
+</aside>
+
+<dialog id="dlg"><div class="dg">
+  <h2>Синхронизация между устройствами</h2>
+  <p style="font-size:14px;color:var(--muted);margin:0">Отметки сохраняются в твой репозиторий на GitHub. Ключ нужно ввести один раз на каждом устройстве — он хранится только в этом браузере.</p>
+  <ol>
+    <li>Открой <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com → новый токен</a>.</li>
+    <li>Название любое, срок — 1 год. <b>Repository access</b> → Only select → <b>dashboard</b>.</li>
+    <li><b>Permissions</b> → Repository → <b>Contents: Read and write</b>. Нажми Generate и скопируй ключ.</li>
+  </ol>
+  <label for="tok">Ключ GitHub</label>
+  <input id="tok" type="password" autocomplete="off" placeholder="github_pat_…">
+  <div class="row"><button class="btn" id="tOff">Отключить</button><button class="btn" id="tCancel">Отмена</button><button class="btn primary" id="tSave">Сохранить</button></div>
+</div></dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+const OWNER='irinabehance-dashboard', REPO='dashboard', PATH='data.json';
+const API=`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
+const PL={'ig-post':['Instagram · пост','p-ig'],'ig-stories':['Instagram · сторис','p-ig'],'ig-reels':['Instagram · рилс','p-ig'],'tg':['Telegram','p-tg'],'threads':['Threads','p-threads'],'profile':['Профиль','p-profile']};
+const ST={plan:['Запланировано','b-plan'],done:['Опубликовано','b-done'],moved:['Перенести','b-moved']};
+const WD=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+const MON=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const $=s=>document.querySelector(s);
+let data=null, token=null, openDate=null, tab='all', saving=Promise.resolve();
+const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+token=ls.get('gh_token');
+
+const b64d=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g,'')),c=>c.charCodeAt(0)));
+const b64e=s=>{const b=new TextEncoder().encode(s);let r='';for(let i=0;i<b.length;i+=0x8000)r+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));return btoa(r)};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const todayStr=new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Novosibirsk'});
+function toast(m,err){const t=$('#toast');t.textContent=m;t.className='toast show'+(err?' err':'');clearTimeout(t._h);t._h=setTimeout(()=>t.className='toast',2600)}
+function setSync(){const on=!!token;$('#sdot').className='dot'+(on?' on':'');$('#stext').textContent=on?'Синхронизация включена':'Только это устройство';$('#banner').classList.toggle('show',!on)}
+
+async function ghGet(){const r=await fetch(API+'?ref=main&t='+Date.now(),{headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json'},cache:'no-store'});if(!r.ok)throw new Error('GitHub '+r.status);const j=await r.json();return{data:JSON.parse(b64d(j.content)),sha:j.sha}}
+async function load(){
+  try{
+    if(token){data=(await ghGet()).data}
+    else{const r=await fetch(PATH+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error(r.status);data=await r.json()}
+  }catch(e){
+    if(token){toast('Не получилось прочитать через GitHub — открываю локальную копию',true);try{const r=await fetch(PATH+'?t='+Date.now());data=await r.json()}catch(_){}}
+    if(!data){$('#grid').innerHTML='<p>Не удалось загрузить план. Обнови страницу.</p>';return}
+  }
+  const loc=JSON.parse(ls.get('local_status')||'{}');
+  if(!token){data.items.forEach(i=>{if(loc[i.id])i.status=loc[i.id]})}
+  setSync();render();
+  if(token&&Object.keys(loc).length){ls.del('local_status');for(const [id,s] of Object.entries(loc)){const it=data.items.find(i=>i.id===id);if(it&&it.status!==s)setStatus(id,s)}}
+}
+
+function itemsFor(d){return data.items.filter(i=>i.date===d)}
+function passes(i){const p=$('#fPlat').value,s=$('#fStat').value;if(p==='ig'&&!i.platform.startsWith('ig'))return false;if(p&&p!=='ig'&&i.platform!==p)return false;if(s&&i.status!==s)return false;return true}
+function dstr(d){return d.toISOString().slice(0,10)}
+function render(){
+  const all=data.items,done=all.filter(i=>i.status==='done').length,mv=all.filter(i=>i.status==='moved').length;
+  $('#counters').innerHTML=`<span><b>${done}</b> из ${all.length} опубликовано</span><span><b>${all.filter(i=>i.platform==='ig-reels').length}</b> рилсов в плане</span>`+(mv?`<span><b>${mv}</b> перенести</span>`:'');
+  $('#weeks').innerHTML=(data.weeks||[]).map(w=>`<div class="week"><div class="r">${esc(w.range)}</div><h3>${esc(w.title)}</h3><p>${esc(w.text)}</p></div>`).join('');
+  $('#ideas').innerHTML=(data.ideas||[]).map(i=>`<div class="idea"><div class="st">${esc(i.status)}</div><h4>${esc(i.title)}</h4><p>${esc(i.text)}</p></div>`).join('');
+  const g=$('#grid');g.innerHTML='';
+  const filt=$('#fPlat').value||$('#fStat').value;
+  for(let d=new Date(data.start+'T00:00:00Z');dstr(d)<=data.end;d.setUTCDate(d.getUTCDate()+1)){
+    const ds=dstr(d),info=data.days[ds],its=itemsFor(ds);
+    const el=document.createElement('button');el.type='button';
+    if(!info&&!its.length){el.className='day empty';el.disabled=true;el.innerHTML=`<div class="dh"><span class="dn">${d.getUTCDate()}</span><span class="dw">${WD[d.getUTCDay()]}</span></div>`;g.appendChild(el);continue}
+    const vis=its.filter(passes),dn=its.filter(i=>i.status==='done').length,m=its.filter(i=>i.status==='moved').length;
+    const plats=[...new Set(its.map(i=>i.platform))];
+    el.className='day '+(info?.type||'')+(its.length&&dn===its.length?' complete':'')+(ds===todayStr?' today':'')+(filt&&!vis.length?' dim':'');
+    el.innerHTML=`<div class="dh"><span class="dn">${d.getUTCDate()}<small>${MON[d.getUTCMonth()].slice(0,3)}</small></span><span class="dtype">${info?.type==='main'?'основной':'лайт'}</span></div><div class="dw">${WD[d.getUTCDay()]}${ds===todayStr?' · сегодня':''}</div>
+      <div class="note">${esc(info?.note||'')}</div>
+      <div class="chips">${plats.map(p=>`<span class="chip ${PL[p][1]}">${PL[p][0].replace('Instagram · ','IG · ')}</span>`).join('')}</div>
+      <div class="prog"><span class="bar"><i style="width:${its.length?dn/its.length*100:0}%"></i></span>${dn}/${its.length}${m?` <span class="mv">↻ ${m}</span>`:''}</div>`;
+    el.onclick=()=>openDay(ds);g.appendChild(el);
+  }
+  if(openDate)renderPanel();
+}
+function openDay(ds){openDate=ds;tab='all';renderPanel();$('#ov').classList.add('open');$('#panel').classList.add('open');$('#panel').setAttribute('aria-hidden','false');setTimeout(()=>$('#pX').focus(),50)}
+function closeDay(){openDate=null;$('#ov').classList.remove('open');$('#panel').classList.remove('open');$('#panel').setAttribute('aria-hidden','true')}
+function renderPanel(){
+  const d=new Date(openDate+'T00:00:00Z'),info=data.days[openDate]||{},its=itemsFor(openDate);
+  $('#pEy').textContent=WD[d.getUTCDay()]+(openDate===todayStr?' · сегодня':'');
+  $('#pT').textContent=d.getUTCDate()+' '+MON[d.getUTCMonth()];
+  $('#pN').textContent=info.note||'';
+  const plats=[...new Set(its.map(i=>i.platform))];
+  $('#pTabs').innerHTML=[['all','Всё']].concat(plats.map(p=>[p,PL[p][0]])).map(([k,l])=>`<button class="ptab${tab===k?' on':''}" data-t="${k}">${esc(l)}</button>`).join('');
+  $('#pTabs').querySelectorAll('.ptab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;renderPanel()});
+  const list=its.filter(i=>tab==='all'||i.platform===tab);
+  $('#pB').innerHTML=list.map(i=>`<article class="item ${i.status==='done'?'done':i.status==='moved'?'moved':''}">
+    <div class="im"><span class="chip ${PL[i.platform][1]}">${PL[i.platform][0]}</span>${i.time?`<span>${esc(i.time)}</span>`:''}${i.format?`<span>· ${esc(i.format)}</span>`:''}<span class="badge ${ST[i.status][1]}">${ST[i.status][0]}</span></div>
+    <h3>${esc(i.title)}</h3><div class="goal">Цель: ${esc(i.goal)}</div>
+    ${i.text?`<details${list.length===1?' open':''}><summary>Текст и подробности</summary><div class="txt">${esc(i.text)}</div><div style="margin-top:10px"><button class="mini" data-copy="${i.id}">Скопировать текст</button></div></details>`:''}
+    ${i.notes?`<div class="notes">${esc(i.notes)}</div>`:''}
+    ${i.link?`<div style="margin-top:10px"><a href="${esc(i.link)}" target="_blank" rel="noopener">Открыть макет в Figma →</a></div>`:''}
+    <div class="acts">
+      <button class="btn${i.status==='done'?' sel-done':''}" data-s="done" data-id="${i.id}">✓ Выставлено</button>
+      <button class="btn${i.status==='moved'?' sel-moved':''}" data-s="moved" data-id="${i.id}">↻ Перенести</button>
+      <button class="btn${i.status==='plan'?' sel-plan':''}" data-s="plan" data-id="${i.id}">В плане</button>
+    </div></article>`).join('')||'<p>На этот день ничего не запланировано.</p>';
+  $('#pB').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>setStatus(b.dataset.id,b.dataset.s));
+  $('#pB').querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{const it=data.items.find(x=>x.id===b.dataset.copy);try{await navigator.clipboard.writeText(it.text);toast('Текст скопирован')}catch(e){toast('Не получилось скопировать',true)}});
+}
+function setStatus(id,s){
+  const it=data.items.find(i=>i.id===id);if(!it||it.status===s)return;
+  const prev=it.status;it.status=s;render();
+  if(!token){const loc=JSON.parse(ls.get('local_status')||'{}');loc[id]=s;ls.set('local_status',JSON.stringify(loc));toast('Сохранено на этом устройстве');return}
+  saving=saving.then(()=>save(id,s)).catch(e=>{it.status=prev;render();toast('Не сохранилось: '+e.message,true)});
+}
+async function save(id,s){
+  for(let attempt=0;attempt<3;attempt++){
+    const cur=await ghGet();const it=cur.data.items.find(i=>i.id===id);if(!it)throw new Error('пункт не найден');
+    it.status=s;
+    const r=await fetch(API,{method:'PUT',headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify({message:`Статус: ${it.title} → ${ST[s][0]}`,content:b64e(JSON.stringify(cur.data,null,1)+'\n'),sha:cur.sha,branch:'main'})});
+    if(r.ok){data=cur.data;render();toast('Сохранено ✓');return}
+    if(r.status!==409&&r.status!==422)throw new Error('GitHub '+r.status);
+  }
+  throw new Error('конфликт версий, обнови страницу');
+}
+$('#pX').onclick=closeDay;$('#ov').onclick=closeDay;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&openDate)closeDay()});
+$('#fPlat').onchange=render;$('#fStat').onchange=render;
+const dlg=$('#dlg');
+$('#setBtn').onclick=()=>{$('#tok').value='';dlg.showModal()};
+$('#tCancel').onclick=()=>dlg.close();
+$('#tOff').onclick=()=>{ls.del('gh_token');token=null;dlg.close();setSync();toast('Синхронизация отключена');load()};
+$('#tSave').onclick=async()=>{const v=$('#tok').value.trim();if(!v)return;token=v;try{await ghGet();ls.set('gh_token',v);dlg.close();toast('Синхронизация включена');load()}catch(e){token=ls.get('gh_token');toast('Ключ не подошёл: '+e.message,true)}};
+load();
+</script>
+</body>
+</html>

@@ -12,7 +12,7 @@
 :root{
   --bg:#F4F1EC;--ink:#171717;--card:#FFFFFF;--line:#D5D0C8;--muted:#625F59;
   --or:#FF5A1F;--or-d:#A92F00;--or-l:#FF7A47;
-  --done:#116B3B;--done-bg:#E1F4E8;--done-card:#EDF8F1;--done-line:#84BD9B;
+  --sch:#3446B8;--sch-bg:#E9ECFB;--sch-line:#A9B3EC;--done:#116B3B;--done-bg:#E1F4E8;--done-card:#EDF8F1;--done-line:#84BD9B;
   --plan:#A45A00;--plan-bg:#FFF1D6;--plan-line:#D79B4D;
   --moved:#6B45B5;--moved-bg:#EFE8FF;--moved-line:#AD93DC;
   --light:#FFF8E9;
@@ -110,6 +110,9 @@ h1{font-size:clamp(34px,5vw,62px);line-height:.97;letter-spacing:-.035em;margin:
 .badge{margin-left:auto;font-size:12px;font-weight:600;border-radius:6px;padding:2px 8px;border:1px solid}
 .b-plan{color:var(--plan);background:var(--plan-bg);border-color:var(--plan-line)}
 .b-done{color:var(--done);background:var(--done-bg);border-color:var(--done-line)}
+.b-sch{color:var(--sch);background:var(--sch-bg);border-color:var(--sch-line)}
+.item.sch{background:#F6F7FE;border-color:var(--sch-line)}
+.acts .btn.sel-sch{background:var(--sch);border-color:var(--sch);color:#fff}
 .b-moved{color:var(--moved);background:var(--moved-bg);border-color:var(--moved-line)}
 details{margin-top:10px;background:var(--bg);border-radius:12px;padding:10px 14px}
 summary{cursor:pointer;font-weight:600;font-size:14px}
@@ -151,7 +154,7 @@ dialog::backdrop{background:rgba(14,14,14,.6)}
 <main>
   <div class="eyebrow">Календарь публикаций · Новосибирск UTC+7</div>
   <h1>Контент по дням</h1>
-  <p class="lead">Нажми на день — внутри площадки, тексты, сценарии и отметки «выставлено» / «перенести».</p>
+  <p class="lead">Нажми на день. Внутри площадки, тексты, сценарии и отметки. Поставила в автопостинг, жми «Запланировано», в назначенное время пост сам станет «Выставлено».</p>
   <div class="rules"><span class="rule">Основные дни — оранжевой рамкой</span><span class="rule">Выходные — лайтово</span><span class="rule">Личная сторис всегда в паре с рабочей</span><span class="rule">Отмечаем только то, что реально вышло</span><span class="rule">Живые сторис без рамок</span><span class="rule">Тексты по-человечески, без двоеточий и тире</span><span class="rule">Сначала Instagram, в тот же или на следующий день дубль в Telegram и ВК</span></div>
   <div class="banner" id="banner">Отметки сейчас сохраняются только на этом устройстве. Подключи синхронизацию (кнопка вверху), чтобы видеть их везде.</div>
   <div class="weeks" id="weeks"></div>
@@ -160,10 +163,10 @@ dialog::backdrop{background:rgba(14,14,14,.6)}
       <option value="">Все площадки</option><option value="ig">Instagram</option><option value="ig-reels">Только рилсы</option><option value="tg">Telegram</option><option value="threads">Threads</option><option value="profile">Задачи по профилю</option>
     </select>
     <select id="fStat" aria-label="Статус">
-      <option value="">Все статусы</option><option value="plan">Запланировано</option><option value="done">Опубликовано</option><option value="moved">Перенести</option>
+      <option value="">Все статусы</option><option value="plan">В плане</option><option value="scheduled">Запланировано</option><option value="done">Выставлено</option><option value="moved">Перенести</option>
     </select>
     <span class="sp"></span>
-    <div class="legend"><span><i style="background:var(--plan-bg);border:1px solid var(--plan-line)"></i>Запланировано</span><span><i style="background:var(--done-bg);border:1px solid var(--done-line)"></i>Опубликовано</span><span><i style="background:var(--moved-bg);border:1px solid var(--moved-line)"></i>Перенести</span></div>
+    <div class="legend"><span><i style="background:var(--plan-bg);border:1px solid var(--plan-line)"></i>В плане</span><span><i style="background:var(--sch-bg);border:1px solid var(--sch-line)"></i>Запланировано</span><span><i style="background:var(--done-bg);border:1px solid var(--done-line)"></i>Выставлено</span><span><i style="background:var(--moved-bg);border:1px solid var(--moved-line)"></i>Перенести</span></div>
   </div>
   <div class="wd"><div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div></div>
   <div class="grid" id="grid"></div>
@@ -195,7 +198,10 @@ dialog::backdrop{background:rgba(14,14,14,.6)}
 const OWNER='irinabehance-dashboard', REPO='dashboard', PATH='data.json';
 const API=`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
 const PL={'ig-post':['Instagram · пост','p-ig'],'ig-stories':['Instagram · сторис','p-ig'],'ig-reels':['Instagram · рилс','p-ig'],'tg':['Telegram','p-tg'],'threads':['Threads','p-threads'],'profile':['Профиль','p-profile']};
-const ST={plan:['Запланировано','b-plan'],done:['Опубликовано','b-done'],moved:['Перенести','b-moved']};
+const ST={plan:['В плане','b-plan'],scheduled:['Запланировано','b-sch'],done:['Выставлено','b-done'],moved:['Перенести','b-moved']};
+function dueAt(i){const m=/^(\d{1,2}):(\d{2})/.exec(i.time||'');const hh=m?m[1].padStart(2,'0'):'23',mm=m?m[2]:'59';return new Date(`${i.date}T${hh}:${mm}:00+07:00`)}
+function eff(i){return i.status==='scheduled'&&Date.now()>=dueAt(i).getTime()?'done':i.status}
+function badge(i){const e=eff(i);if(i.status==='scheduled'&&e==='done')return['Выставлено · автопостинг','b-done'];if(i.platform==='ig-stories'&&e==='plan'&&i.date<todayStr)return['Не выставлено','b-moved'];return ST[e]||ST.plan}
 const WD=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
 const MON=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 const $=s=>document.querySelector(s);
@@ -226,11 +232,11 @@ async function load(){
 }
 
 function itemsFor(d){return data.items.filter(i=>i.date===d)}
-function passes(i){const p=$('#fPlat').value,s=$('#fStat').value;if(p==='ig'&&!i.platform.startsWith('ig'))return false;if(p&&p!=='ig'&&i.platform!==p)return false;if(s&&i.status!==s)return false;return true}
+function passes(i){const p=$('#fPlat').value,s=$('#fStat').value;if(p==='ig'&&!i.platform.startsWith('ig'))return false;if(p&&p!=='ig'&&i.platform!==p)return false;if(s&&eff(i)!==s)return false;return true}
 function dstr(d){return d.toISOString().slice(0,10)}
 function render(){
-  const all=data.items,done=all.filter(i=>i.status==='done').length,mv=all.filter(i=>i.status==='moved').length;
-  $('#counters').innerHTML=`<span><b>${done}</b> из ${all.length} опубликовано</span><span><b>${all.filter(i=>i.platform==='ig-reels').length}</b> рилсов в плане</span>`+(mv?`<span><b>${mv}</b> перенести</span>`:'');
+  const all=data.items,done=all.filter(i=>eff(i)==='done').length,mv=all.filter(i=>i.status==='moved').length,sc=all.filter(i=>i.status==='scheduled'&&eff(i)!=='done').length;
+  $('#counters').innerHTML=`<span><b>${done}</b> из ${all.length} выставлено</span>${sc?`<span><b>${sc}</b> в автопостинге</span>`:''}<span><b>${all.filter(i=>i.platform==='ig-reels').length}</b> рилсов в плане</span>`+(mv?`<span><b>${mv}</b> перенести</span>`:'');
   $('#weeks').innerHTML=(data.weeks||[]).map(w=>`<div class="week"><div class="r">${esc(w.range)}</div><h3>${esc(w.title)}</h3><p>${esc(w.text)}</p></div>`).join('');
   $('#ideas').innerHTML=(data.ideas||[]).map(i=>`<div class="idea"><div class="st">${esc(i.status)}</div><h4>${esc(i.title)}</h4><p>${esc(i.text)}</p></div>`).join('');
   const g=$('#grid');g.innerHTML='';
@@ -239,7 +245,7 @@ function render(){
     const ds=dstr(d),info=data.days[ds],its=itemsFor(ds);
     const el=document.createElement('button');el.type='button';
     if(!info&&!its.length){el.className='day empty';el.disabled=true;el.innerHTML=`<div class="dh"><span class="dn">${d.getUTCDate()}</span><span class="dw">${WD[d.getUTCDay()]}</span></div>`;g.appendChild(el);continue}
-    const vis=its.filter(passes),dn=its.filter(i=>i.status==='done').length,m=its.filter(i=>i.status==='moved').length;
+    const vis=its.filter(passes),dn=its.filter(i=>eff(i)==='done').length,m=its.filter(i=>i.status==='moved').length;
     const plats=[...new Set(its.map(i=>i.platform))];
     el.className='day '+(info?.type||'')+(its.length&&dn===its.length?' complete':'')+(ds===todayStr?' today':'')+(filt&&!vis.length?' dim':'');
     el.innerHTML=`<div class="dh"><span class="dn">${d.getUTCDate()}<small>${MON[d.getUTCMonth()].slice(0,3)}</small></span><span class="dtype">${info?.type==='main'?'основной':'лайт'}</span></div><div class="dw">${WD[d.getUTCDay()]}${ds===todayStr?' · сегодня':''}</div>
@@ -261,20 +267,20 @@ function renderPanel(){
   $('#pTabs').innerHTML=[['all','Всё']].concat(plats.map(p=>[p,PL[p][0]])).map(([k,l])=>`<button class="ptab${tab===k?' on':''}" data-t="${k}">${esc(l)}</button>`).join('');
   $('#pTabs').querySelectorAll('.ptab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;renderPanel()});
   const list=its.filter(i=>tab==='all'||i.platform===tab);
-  $('#pB').innerHTML=list.map(i=>`<article class="item ${i.status==='done'?'done':i.status==='moved'?'moved':''}">
-    <div class="im"><span class="chip ${PL[i.platform][1]}">${PL[i.platform][0]}</span>${i.time?`<span>${esc(i.time)}</span>`:''}${i.format?`<span>· ${esc(i.format)}</span>`:''}<span class="badge ${ST[i.status][1]}">${ST[i.status][0]}</span></div>
+  $('#pB').innerHTML=list.map(i=>{const e=eff(i),bd=badge(i);return `<article class="item ${e==='done'?'done':i.status==='moved'?'moved':i.status==='scheduled'?'sch':''}">
+    <div class="im"><span class="chip ${PL[i.platform][1]}">${PL[i.platform][0]}</span>${i.time?`<span>${esc(i.time)}</span>`:''}${i.format?`<span>· ${esc(i.format)}</span>`:''}<span class="badge ${bd[1]}">${bd[0]}</span></div>
     <h3>${esc(i.title)}</h3><div class="goal">Цель: ${esc(i.goal)}</div>
     ${i.text?`<details${list.length===1?' open':''}><summary>Текст и подробности</summary><div class="txt">${esc(i.text)}</div><div style="margin-top:10px"><button class="mini" data-copy="${i.id}">Скопировать текст</button></div></details>`:''}
     ${i.notes?`<div class="notes">${esc(i.notes)}</div>`:''}
     ${i.link?`<div style="margin-top:10px"><a href="${esc(i.link)}" target="_blank" rel="noopener">Открыть макет в Figma →</a></div>`:''}
-    <div class="acts">
-      <button class="btn${i.status==='done'?' sel-done':''}" data-s="done" data-id="${i.id}">✓ Выставлено</button>
-      <button class="btn${i.status==='moved'?' sel-moved':''}" data-s="moved" data-id="${i.id}">↻ Перенести</button>
-      <button class="btn${i.status==='plan'?' sel-plan':''}" data-s="plan" data-id="${i.id}">В плане</button>
-    </div></article>`).join('')||'<p>На этот день ничего не запланировано.</p>';
+    <div class="acts">${acts(i)}</div></article>`}).join('')||'<p>На этот день ничего не запланировано.</p>';
   $('#pB').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>setStatus(b.dataset.id,b.dataset.s));
   $('#pB').querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{const it=data.items.find(x=>x.id===b.dataset.copy);try{await navigator.clipboard.writeText(it.text);toast('Текст скопирован')}catch(e){toast('Не получилось скопировать',true)}});
 }
+function acts(i){const b=(s,l,c)=>`<button class="btn${i.status===s?' '+c:''}" data-s="${s}" data-id="${i.id}">${l}</button>`;
+  if(i.platform==='ig-stories')return b('done','✓ Выставлено','sel-done')+b('plan','Не выставлено',i.date<todayStr?'sel-moved':'');
+  if(i.platform==='profile')return b('done','✓ Сделано','sel-done')+b('plan','Не сделано','sel-plan');
+  return b('scheduled','⏱ Запланировано','sel-sch')+b('done','✓ Выставлено','sel-done')+b('moved','↻ Перенести','sel-moved')+b('plan','В плане','sel-plan')}
 function setStatus(id,s){
   const it=data.items.find(i=>i.id===id);if(!it||it.status===s)return;
   const prev=it.status;it.status=s;render();
@@ -300,6 +306,7 @@ $('#tCancel').onclick=()=>dlg.close();
 $('#tOff').onclick=()=>{ls.del('gh_token');token=null;dlg.close();setSync();toast('Синхронизация отключена');load()};
 $('#tSave').onclick=async()=>{const v=$('#tok').value.trim();if(!v)return;token=v;try{await ghGet();ls.set('gh_token',v);dlg.close();toast('Синхронизация включена');load()}catch(e){token=ls.get('gh_token');toast('Ключ не подошёл: '+e.message,true)}};
 load();
+setInterval(()=>{if(data)render()},60000);
 </script>
 </body>
 </html>

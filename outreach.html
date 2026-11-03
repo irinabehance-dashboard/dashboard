@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<title>Рассылки</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23171717'/%3E%3Ctext x='32' y='44' font-family='Arial' font-weight='700' font-size='34' fill='%23FF5A1F' text-anchor='middle'%3EИ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F1EC;--ink:#171717;--card:#FFFFFF;--line:#D5D0C8;--muted:#625F59;
+  --or:#FF5A1F;--or-d:#A92F00;--or-l:#FF7A47;
+  --sch:#3446B8;--sch-bg:#E9ECFB;--done:#116B3B;--done-bg:#E1F4E8;
+  --plan:#A45A00;--plan-bg:#FFF1D6;--moved:#6B45B5;--moved-bg:#EFE8FF;--red:#B3261E;--red-bg:#FCE8E6;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.45 Inter,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+.top{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff}
+.top-in{max-width:1420px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.brand{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.brand b{color:var(--or-l)}
+.counters{display:flex;gap:14px;font-size:13px;color:#cfcac2;flex-wrap:wrap}
+.counters b{color:#fff;font-weight:600}
+.sync{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:#cfcac2;flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:50%;background:#8a8580;display:inline-block}
+.dot.on{background:#4ED08A}
+.btn{border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:10px;padding:8px 14px;font-weight:600;font-size:14px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn:hover{background:#f0ece6}
+.btn.primary{background:var(--or);border-color:var(--or-d);color:#fff}
+.btn.sm{padding:5px 10px;font-size:13px;border-width:1.5px;border-radius:8px}
+.btn.ghost{border-color:var(--line)}
+.top .btn{background:transparent;color:#fff;border-color:#4a4744;padding:6px 12px;font-size:13px}
+.top .btn:hover{background:#262626}
+main{max-width:1420px;margin:0 auto;padding:28px}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+h1{font-size:44px;line-height:1.05;letter-spacing:-.03em;margin:6px 0 10px;font-weight:700}
+.lead{color:var(--muted);max-width:780px;margin:0 0 22px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 22px}
+.tab{border:2px solid var(--line);background:#fff;border-radius:999px;padding:7px 16px;font-weight:600;font-size:14px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.blk{margin:0 0 30px}
+.blk h2{font-size:24px;letter-spacing:-.02em;margin:0 0 4px;font-weight:600;display:flex;gap:10px;align-items:baseline}
+.blk h2 .n{font-size:15px;color:var(--muted);font-weight:500}
+.blk .hint{color:var(--muted);font-size:14px;margin:0 0 12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.card .h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.acc{font-weight:700;font-size:17px;text-decoration:none}
+.acc:hover{text-decoration:underline}
+.chip{font-size:12px;font-weight:600;border-radius:999px;padding:2px 9px;background:#F0ECE6;color:#3d3a36}
+.chip.client{background:#FFE7DC;color:var(--or-d)}
+.chip.partner{background:var(--sch-bg);color:var(--sch)}
+.st{font-size:12px;font-weight:600;border-radius:6px;padding:2px 8px}
+.st.found{background:#F0ECE6;color:#3d3a36}.st.followed{background:var(--plan-bg);color:var(--plan)}
+.st.sent,.st.reminded{background:var(--sch-bg);color:var(--sch)}.st.replied,.st.call,.st.agreed{background:var(--moved-bg);color:var(--moved)}
+.st.order{background:var(--done-bg);color:var(--done)}.st.declined,.st.silent{background:var(--red-bg);color:var(--red)}
+.meta{font-size:13px;color:var(--muted)}
+.why{font-size:14px}
+.msg{background:#FAF8F5;border:1px solid #ECE7E0;border-radius:10px;padding:10px 12px;font-size:14px;white-space:pre-wrap}
+.msg .lbl{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:4px}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+.note{background:var(--plan-bg);border-radius:10px;padding:8px 12px;font-size:13px;color:#6b3d00}
+.empty{color:var(--muted);font-size:14px;padding:14px 16px;border:1.5px dashed var(--line);border-radius:14px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+.filters select,.filters input{border:2px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+table{width:100%;border-collapse:collapse;background:#fff;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;font-size:14px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid #ECE7E0;vertical-align:top}
+th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;background:#FAF8F5}
+tr:last-child td{border-bottom:0}
+.tw{overflow-x:auto}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:0 0 22px}
+.kpi{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:14px}
+.kpi b{display:block;font-size:30px;letter-spacing:-.02em}
+.kpi span{font-size:13px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;transition:.2s;z-index:60;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.toast.err{background:var(--red)}
+dialog{border:0;border-radius:16px;padding:22px;max-width:560px;width:calc(100% - 32px)}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+dialog h3{margin:0 0 8px;font-size:20px}
+dialog textarea,dialog input,dialog select{width:100%;border:2px solid var(--line);border-radius:10px;padding:10px 12px;margin:6px 0 12px}
+dialog textarea{min-height:200px;font-family:ui-monospace,Menlo,monospace;font-size:13px}
+.drow{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.banner{display:none;background:var(--plan-bg);border:1.5px solid #D79B4D;border-radius:12px;padding:10px 14px;font-size:14px;margin:0 0 18px}
+.banner.show{display:block}
+@media (max-width:720px){.top{position:static}main{padding:18px 14px}.top-in{padding:12px 14px}h1{font-size:32px}.cards{grid-template-columns:1fr}.sync{margin-left:0}}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <div class="brand">Рассылки <b>Ирины</b></div>
+  <div class="counters" id="counters"></div>
+  <div class="sync"><a class="btn" href="index.html">Контент-план</a><span class="dot" id="sdot"></span><span id="stext">Загрузка…</span><button class="btn" id="setBtn">Синхронизация</button></div>
+</div></header>
+<main>
+  <div class="eyebrow">Instagram · клиенты и партнёры</div>
+  <h1>Рассылки</h1>
+  <p class="lead">Каждый будний день 10 подписок. Через 2 дня сообщение с картинкой ниши. Через 3 дня без ответа одно напоминание. После ответа второе сообщение со ссылкой на страницу ниши. Не ответили за 14 дней, отписываемся.</p>
+  <div class="banner" id="banner">Синхронизация выключена, отметки сохраняются только на этом устройстве. Нажми «Синхронизация» и вставь тот же ключ GitHub, что в контент-плане. Если ключ уже вводила там, он подхватится сам.</div>
+  <div class="tabs" id="tabs"></div>
+  <div id="view"></div>
+</main>
+
+<dialog id="dlg"><h3>Синхронизация</h3><p class="meta">Ключ GitHub с доступом к репозиторию dashboard. Тот же, что в контент-плане.</p><input id="tok" type="password" placeholder="github_pat_…"><div class="drow"><button class="btn ghost" id="tOff">Выключить</button><button class="btn ghost" id="tCancel">Отмена</button><button class="btn primary" id="tSave">Сохранить</button></div></dialog>
+<dialog id="imp"><h3>Добавить из ChatGPT</h3><p class="meta">Вставь JSON-массив записей от ChatGPT. Аккаунты, которые уже есть, пропустятся.</p><textarea id="impT" placeholder='[{"type":"client","account":"@...", ...}]'></textarea><div class="drow"><button class="btn ghost" id="impC">Отмена</button><button class="btn primary" id="impS">Добавить</button></div></dialog>
+<dialog id="ord"><h3 id="ordH">Заказ</h3><label class="meta">Что заказали</label><select id="ordK"><option value="mini">Мини-сайт</option><option value="brand">Фирменный стиль или сайт</option></select><label class="meta">Сумма, ₽</label><input id="ordA" type="number" inputmode="numeric" placeholder="15000"><div class="drow"><button class="btn ghost" id="ordC">Отмена</button><button class="btn primary" id="ordS">Сохранить</button></div></dialog>
+<dialog id="ref"><h3 id="refH">Клиент по промокоду</h3><label class="meta">Что заказал клиент</label><select id="refK"><option value="mini">Мини-сайт · партнёру 2 000 ₽</option><option value="brand">Фирменный стиль или сайт · партнёру 5 000 ₽</option></select><label class="meta">Имя или аккаунт клиента</label><input id="refN" placeholder="@client"><div class="drow"><button class="btn ghost" id="refC">Отмена</button><button class="btn primary" id="refS">Добавить</button></div></dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+const OWNER='irinabehance-dashboard',REPO='dashboard',PATH='outreach.json';
+const API=`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
+const PAY={mini:2000,brand:5000};
+const STN={found:'Найден',followed:'Подписалась',sent:'Написала',reminded:'Напомнила',replied:'Ответил',call:'Созвон',agreed:'Согласился',order:'Заказ',declined:'Отказ',silent:'Нет ответа'};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+const b64d=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g,'')),c=>c.charCodeAt(0)));
+const b64e=s=>{const b=new TextEncoder().encode(s);let r='';for(let i=0;i<b.length;i+=0x8000)r+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));return btoa(r)};
+const today=()=>new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Novosibirsk'});
+const days=(a,b)=>Math.round((Date.parse(b)-Date.parse(a))/864e5);
+const fmt=d=>d?new Date(d+'T00:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'short'}):'';
+const normAcc=a=>String(a||'').trim().toLowerCase().replace(/^@/,'').replace(/^https?:\/\/(www\.)?instagram\.com\//,'').replace(/[/?].*$/,'');
+let data=null,token=ls.get('gh_token'),tab=ls.get('out_tab')||'today',saving=Promise.resolve(),pending=null;
+function toast(m,err){const t=$('#toast');t.textContent=m;t.className='toast show'+(err?' err':'');clearTimeout(t._h);t._h=setTimeout(()=>t.className='toast',2600)}
+function setSync(){$('#sdot').className='dot'+(token?' on':'');$('#stext').textContent=token?'Синхронизация включена':'Только это устройство';$('#banner').classList.toggle('show',!token)}
+
+/* effective status: auto «нет ответа» через 5 дней после напоминания */
+function eff(r){if(r.status==='reminded'&&r.reminded&&days(r.reminded,today())>=5)return'silent';return r.status}
+function niche(n){return (data.niches||[]).find(x=>x.niche===n)||{}}
+
+async function ghGet(){const r=await fetch(API+'?ref=main&t='+Date.now(),{headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json'},cache:'no-store'});if(!r.ok)throw new Error('GitHub '+r.status);const j=await r.json();return{data:JSON.parse(b64d(j.content)),sha:j.sha}}
+async function load(){
+  try{if(token){data=(await ghGet()).data}else{const r=await fetch(PATH+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error(r.status);data=await r.json()}}
+  catch(e){try{const r=await fetch(PATH+'?t='+Date.now());data=await r.json();if(token)toast('GitHub недоступен, открыта копия с сайта',true)}catch(_){$('#view').innerHTML='<p class="empty">Не удалось загрузить данные. Обнови страницу.</p>';return}}
+  data.rows=data.rows||[];
+  const loc=JSON.parse(ls.get('out_local')||'{}');
+  if(!token){applyLocal(data,loc)}
+  setSync();render();
+  if(token&&Object.keys(loc).length){ls.del('out_local');commit(d=>applyLocal(d,loc),'Перенос отметок с устройства')}
+}
+function applyLocal(d,loc){for(const [id,p] of Object.entries(loc.patch||{})){const r=d.rows.find(x=>x.id===id);if(r)Object.assign(r,p)}for(const r of (loc.add||[]))if(!d.rows.some(x=>normAcc(x.account)===normAcc(r.account)))d.rows.push(r)}
+
+/* изменения: локально сразу, потом в GitHub с повтором при конфликте */
+function change(fn,msg){
+  fn(data);render();
+  if(!token){toast('Сохранено на этом устройстве');const loc=JSON.parse(ls.get('out_local')||'{}');loc.patch=loc.patch||{};loc.add=loc.add||[];
+    /* храним полные строки, это проще */ for(const r of data.rows){loc.patch[r.id]=r}ls.set('out_local',JSON.stringify(loc));return}
+  saving=saving.then(()=>commit(fn,msg)).catch(e=>{toast('Не сохранилось: '+e.message,true);load()});
+}
+async function commit(fn,msg){
+  for(let a=0;a<3;a++){
+    const cur=await ghGet();cur.data.rows=cur.data.rows||[];fn(cur.data);
+    const r=await fetch(API,{method:'PUT',headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify({message:'Рассылки: '+msg,content:b64e(JSON.stringify(cur.data,null,1)+'\n'),sha:cur.sha,branch:'main'})});
+    if(r.ok){data=cur.data;render();toast('Сохранено ✓');return}
+    if(r.status!==409&&r.status!==422)throw new Error('GitHub '+r.status);
+  }
+  throw new Error('конфликт версий, обнови страницу');
+}
+function setSt(id,st,field,extra){const t=today();change(d=>{const r=d.rows.find(x=>x.id===id);if(!r)return;r.status=st;if(field)r[field]=t;if(extra)Object.assign(r,extra)},`${(data.rows.find(x=>x.id===id)||{}).account} → ${STN[st]||st}`)}
+
+/* ---------- views ---------- */
+const TABS=[['today','Сегодня'],['all','Все'],['partners','Партнёры'],['stats','Статистика'],['niches','Ниши и картинки']];
+function render(){
+  if(!data)return;const t=today();
+  const R=data.rows;const wk=R.filter(r=>r.sent&&days(r.sent,t)<7).length;
+  $('#counters').innerHTML=`<span><b>${R.length}</b> в базе</span><span><b>${R.filter(r=>r.sent).length}</b> написали</span><span><b>${R.filter(r=>r.replied).length}</b> ответили</span><span><b>${R.filter(r=>r.order).length}</b> заказов</span><span><b>${wk}</b> сообщений за 7 дней</span>`;
+  $('#tabs').innerHTML=TABS.map(([k,n])=>`<button class="tab ${k===tab?'on':''}" data-t="${k}">${n}</button>`).join('')+`<button class="tab" id="impB">+ Добавить из ChatGPT</button>`;
+  $('#tabs').querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{tab=b.dataset.t;ls.set('out_tab',tab);render()});
+  $('#impB').onclick=()=>{$('#impT').value='';$('#imp').showModal()};
+  ({today:vToday,all:vAll,partners:vPartners,stats:vStats,niches:vNiches})[tab]();
+  bind();
+}
+function card(r,stage){
+  const n=niche(r.niche),e=eff(r);
+  let m='';
+  if(stage==='write')m=msgBox('Первое сообщение · прикрепи картинку «'+(r.image||n.image||'ниши')+'»',r.msg1,r.id,'msg1');
+  if(stage==='remind')m=msgBox('Напоминание',r.followup,r.id,'followup');
+  if(stage==='reply')m=msgBox('Второе сообщение со ссылкой',r.msg2,r.id,'msg2');
+  if(stage==='follow'&&r.detail)m=`<div class="msg"><span class="lbl">Деталь из профиля для сообщения</span>${esc(r.detail)}</div>`;
+  if(r.notes)m=`<div class="note">${esc(r.notes)}</div>`+m;
+  let b='';
+  if(stage==='follow')b=btn(r.id,'followed','✓ Подписалась','primary')+btn(r.id,'declined','Не подходит');
+  if(stage==='write')b=btn(r.id,'sent','✓ Написала','primary')+btn(r.id,'replied','Ответил');
+  if(stage==='remind')b=btn(r.id,'reminded','✓ Напомнила','primary')+btn(r.id,'replied','Ответил')+btn(r.id,'declined','Отказ');
+  if(stage==='reply')b=(r.type==='partner'?btn(r.id,'agreed','Согласился','primary'):btn(r.id,'call','Созвон','primary')+`<button class="btn sm" data-ord="${r.id}">Заказ</button>`)+btn(r.id,'declined','Отказ');
+  if(stage==='unf')b=`<button class="btn sm primary" data-unf="${r.id}">✓ Отписалась</button>`;
+  return `<div class="card"><div class="h"><a class="acc" href="${esc(r.url||('https://www.instagram.com/'+normAcc(r.account)+'/'))}" target="_blank" rel="noopener">${esc(r.account)}</a><span class="chip ${r.type}">${r.type==='partner'?'партнёр':'клиент'}</span><span class="chip">${esc(r.niche||'')}</span><span class="st ${e}">${STN[e]||e}</span></div>
+  <div class="meta">${r.name?esc(r.name)+' · ':''}${r.followers?Number(r.followers).toLocaleString('ru-RU')+' подписчиков · ':''}${r.city?esc(r.city)+' · ':''}найден ${fmt(r.found)}${r.followed?' · подписка '+fmt(r.followed):''}${r.sent?' · написали '+fmt(r.sent):''}</div>
+  ${r.why?`<div class="why">${esc(r.why)}</div>`:''}${m}<div class="acts">${b}</div></div>`;
+}
+const btn=(id,st,label,cls='')=>`<button class="btn sm ${cls}" data-id="${id}" data-st="${st}">${label}</button>`;
+const msgBox=(lbl,txt,id,f)=>txt?`<div class="msg"><span class="lbl">${esc(lbl)}</span>${esc(txt)}</div><div class="acts"><button class="btn sm" data-copy="${id}" data-f="${f}">Скопировать текст</button></div>`:'';
+function block(title,hint,list,stage,limit){
+  const shown=limit?list.slice(0,limit):list;
+  return `<section class="blk"><h2>${title}<span class="n">${list.length}</span></h2><p class="hint">${hint}</p>${shown.length?`<div class="cards">${shown.map(r=>card(r,stage)).join('')}</div>`:'<div class="empty">Сегодня здесь пусто</div>'}${limit&&list.length>limit?`<p class="hint">И ещё ${list.length-limit} на следующие дни</p>`:''}</section>`;
+}
+function vToday(){
+  const t=today(),R=data.rows;
+  const fol=R.filter(r=>eff(r)==='found'&&(!r.follow_plan||r.follow_plan<=t)).sort((a,b)=>(a.type>b.type?1:-1));
+  const wr=R.filter(r=>eff(r)==='followed'&&r.followed&&days(r.followed,t)>=2);
+  const rem=R.filter(r=>eff(r)==='sent'&&r.sent&&days(r.sent,t)>=3);
+  const rep=R.filter(r=>eff(r)==='replied');
+  const unf=R.filter(r=>['silent','declined'].includes(eff(r))&&r.followed&&!r.unfollowed&&days(r.followed,t)>=14);
+  const B=[['Ответили','Скопируй второе сообщение со ссылкой и отправь. Если вопрос нестандартный, перешли ответ ChatGPT.',rep,'reply'],
+   ['Написать','Подписка была 2 дня назад. Отправь сообщение и прикрепи картинку ниши.',wr,'write'],
+   ['Напомнить','Написали 3 дня назад, ответа нет. Одно напоминание, больше не пишем.',rem,'remind'],
+   ['Подписаться','Подпишись и поставь лайк 1–2 постам. Через 2 дня они появятся в «Написать».',fol,'follow',15],
+   ['Отписаться','Не ответили или отказались, подписка больше 14 дней.',unf,'unf']];
+  const full=B.filter(b=>b[2].length),emp=B.filter(b=>!b[2].length);
+  $('#view').innerHTML=(full.length?full.map(b=>block(...b)).join(''):'<div class="empty">На сегодня всё сделано</div>')+(emp.length?`<p class="hint" style="margin-top:8px">Пусто сегодня ${emp.map(b=>'«'+b[0]+'»').join(', ')}</p>`:'');
+}
+function vAll(){
+  const f=JSON.parse(ls.get('out_f')||'{}');const niches=[...new Set(data.rows.map(r=>r.niche).filter(Boolean))];
+  let L=data.rows.filter(r=>(!f.type||r.type===f.type)&&(!f.niche||r.niche===f.niche)&&(!f.st||eff(r)===f.st)&&(!f.q||normAcc(r.account).includes(f.q.toLowerCase())||String(r.name||'').toLowerCase().includes(f.q.toLowerCase())));
+  $('#view').innerHTML=`<div class="filters"><select id="fT"><option value="">Клиенты и партнёры</option><option value="client">Клиенты</option><option value="partner">Партнёры</option></select><select id="fN"><option value="">Все ниши</option>${niches.map(n=>`<option>${esc(n)}</option>`).join('')}</select><select id="fS"><option value="">Все статусы</option>${Object.entries(STN).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select><input id="fQ" placeholder="Поиск по аккаунту" value="${esc(f.q||'')}"></div>
+  <div class="tw"><table><thead><tr><th>Аккаунт</th><th>Тип</th><th>Ниша</th><th>Подписчики</th><th>Статус</th><th>Найден</th><th>Подписка</th><th>Написали</th><th>Ответ</th><th>Почему подходит</th><th></th></tr></thead><tbody>${L.map(r=>`<tr><td><a class="acc" style="font-size:14px" href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.account)}</a></td><td>${r.type==='partner'?'партнёр':'клиент'}</td><td>${esc(r.niche)}</td><td>${r.followers?Number(r.followers).toLocaleString('ru-RU'):''}</td><td><span class="st ${eff(r)}">${STN[eff(r)]}</span></td><td>${fmt(r.found)}</td><td>${fmt(r.followed)}</td><td>${fmt(r.sent)}</td><td>${fmt(r.replied)}</td><td>${esc(r.why)}</td><td><button class="btn sm ghost" data-del="${r.id}">Удалить</button></td></tr>`).join('')}</tbody></table></div>`;
+  $('#fT').value=f.type||'';$('#fN').value=f.niche||'';$('#fS').value=f.st||'';
+  const upd=()=>{ls.set('out_f',JSON.stringify({type:$('#fT').value,niche:$('#fN').value,st:$('#fS').value,q:$('#fQ').value}));render()};
+  ['#fT','#fN','#fS'].forEach(s=>$(s).onchange=upd);$('#fQ').onchange=upd;
+}
+function vPartners(){
+  const P=data.rows.filter(r=>r.type==='partner'&&(eff(r)==='agreed'||(r.referrals||[]).length));
+  const debt=P.reduce((s,r)=>s+(r.referrals||[]).filter(x=>!x.payout_paid).reduce((a,x)=>a+PAY[x.kind],0),0);
+  $('#view').innerHTML=`<div class="kpis"><div class="kpi"><b>${P.length}</b><span>партнёров согласились</span></div><div class="kpi"><b>${P.reduce((s,r)=>s+(r.referrals||[]).length,0)}</b><span>клиентов по промокодам</span></div><div class="kpi"><b>${debt.toLocaleString('ru-RU')} ₽</b><span>нужно выплатить</span></div></div>
+  <p class="hint">Партнёру 2 000 ₽ за мини-сайт и 5 000 ₽ за фирменный стиль или сайт. Клиенту по промокоду скидка 1 000 ₽ на мини-сайт и 3 000 ₽ на фирменный стиль и сайт.</p>
+  ${P.length?`<div class="cards">${P.map(r=>`<div class="card"><div class="h"><a class="acc" href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.account)}</a><span class="chip partner">промокод ${esc(r.promo||'не задан')}</span></div><div class="meta">${esc(r.niche)}</div>
+   ${(r.referrals||[]).map((x,i)=>`<div class="meta">${fmt(x.date)} · ${esc(x.client||'клиент')} · ${x.kind==='mini'?'мини-сайт':'фирменный стиль или сайт'} · ${PAY[x.kind].toLocaleString('ru-RU')} ₽ · ${x.payout_paid?'выплачено ✓':`<button class="btn sm" data-pay="${r.id}" data-i="${i}">Отметить выплату</button>`}</div>`).join('')}
+   <div class="acts"><button class="btn sm primary" data-ref="${r.id}">+ клиент по промокоду</button><button class="btn sm ghost" data-promo="${r.id}">Промокод</button></div></div>`).join('')}</div>`:'<div class="empty">Пока никто не согласился. Когда партнёр согласится, нажми «Согласился» в его карточке, и он появится здесь.</div>'}`;
+}
+function isoWeek(d){const x=new Date(d+'T00:00:00');const day=(x.getDay()+6)%7;x.setDate(x.getDate()-day);return x.toLocaleDateString('sv-SE')}
+function vStats(){
+  const R=data.rows,t=today(),mon=t.slice(0,7);
+  const agg=L=>{const s=L.filter(r=>r.sent).length,rp=L.filter(r=>r.replied).length;return{found:L.length,fol:L.filter(r=>r.followed).length,sent:s,rep:rp,pct:s?Math.round(rp/s*100)+'%':'—',call:L.filter(r=>r.call).length,ord:L.filter(r=>r.order).length,sum:L.reduce((a,r)=>a+(+r.amount||0),0)}};
+  const M=agg(R.filter(r=>(r.found||'').startsWith(mon)||(r.sent||'').startsWith(mon)));
+  const tbl=(title,groups)=>`<section class="blk"><h2>${title}</h2><div class="tw"><table><thead><tr><th></th><th>Найдено</th><th>Подписок</th><th>Сообщений</th><th>Ответов</th><th>% ответов</th><th>Созвонов</th><th>Заказов</th><th>Сумма</th></tr></thead><tbody>${groups.map(([k,L])=>{const a=agg(L);return`<tr><td><b>${esc(k)}</b></td><td>${a.found}</td><td>${a.fol}</td><td>${a.sent}</td><td>${a.rep}</td><td>${a.pct}</td><td>${a.call}</td><td>${a.ord}</td><td>${a.sum.toLocaleString('ru-RU')} ₽</td></tr>`}).join('')||'<tr><td colspan="9">Пока нет данных</td></tr>'}</tbody></table></div></section>`;
+  const by=(L,f)=>{const m={};L.forEach(r=>{const k=f(r);if(k)(m[k]=m[k]||[]).push(r)});return Object.entries(m).sort((a,b)=>a[0]<b[0]?1:-1)};
+  const C=R.filter(r=>r.type==='client'),P=R.filter(r=>r.type==='partner');
+  $('#view').innerHTML=`<div class="eyebrow" style="margin-bottom:8px">Этот месяц</div><div class="kpis"><div class="kpi"><b>${M.sent}</b><span>сообщений</span></div><div class="kpi"><b>${M.rep}</b><span>ответов · ${M.pct}</span></div><div class="kpi"><b>${M.call}</b><span>созвонов</span></div><div class="kpi"><b>${M.ord}</b><span>заказов</span></div><div class="kpi"><b>${M.sum.toLocaleString('ru-RU')} ₽</b><span>сумма заказов</span></div></div>`+
+   tbl('Клиенты по неделям',by(C,r=>r.found&&'неделя с '+fmt(isoWeek(r.found))))+tbl('Клиенты по нишам',by(C,r=>r.niche))+tbl('Партнёры по неделям',by(P,r=>r.found&&'неделя с '+fmt(isoWeek(r.found))));
+}
+function vNiches(){
+  $('#view').innerHTML=`<p class="hint">Страница ниши уходит во втором сообщении. Картинку ниши прикрепляешь к первому сообщению.</p><div class="tw"><table><thead><tr><th>Ниша</th><th>Страница</th><th>Картинка</th><th>В базе</th></tr></thead><tbody>${(data.niches||[]).map(n=>`<tr><td><b>${esc(n.niche)}</b></td><td><a href="${esc(n.page)}" target="_blank" rel="noopener">${esc(n.page)}</a></td><td>${esc(n.image)}</td><td>${data.rows.filter(r=>r.niche===n.niche).length}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function bind(){
+  const V=$('#view');
+  V.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>{const st=b.dataset.st;const f={followed:'followed',sent:'sent',reminded:'reminded',replied:'replied',call:'call',agreed:'agreed',declined:'declined_at'}[st];setSt(b.dataset.id,st,f)});
+  V.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{const r=data.rows.find(x=>x.id===b.dataset.copy);try{await navigator.clipboard.writeText(r[b.dataset.f]||'');toast('Текст скопирован')}catch(e){toast('Не получилось скопировать',true)}});
+  V.querySelectorAll('[data-unf]').forEach(b=>b.onclick=()=>change(d=>{const r=d.rows.find(x=>x.id===b.dataset.unf);if(r)r.unfollowed=today()},'отписка'));
+  V.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const r=data.rows.find(x=>x.id===b.dataset.del);if(b.dataset.sure){change(d=>{d.rows=d.rows.filter(x=>x.id!==r.id)},'удалён '+r.account)}else{b.dataset.sure=1;b.textContent='Точно удалить?'}});
+  V.querySelectorAll('[data-ord]').forEach(b=>b.onclick=()=>{pending=b.dataset.ord;$('#ordA').value='';$('#ord').showModal()});
+  V.querySelectorAll('[data-ref]').forEach(b=>b.onclick=()=>{pending=b.dataset.ref;$('#refN').value='';$('#ref').showModal()});
+  V.querySelectorAll('[data-pay]').forEach(b=>b.onclick=()=>change(d=>{const r=d.rows.find(x=>x.id===b.dataset.pay);r.referrals[+b.dataset.i].payout_paid=today()},'выплата партнёру'));
+  V.querySelectorAll('[data-promo]').forEach(b=>b.onclick=()=>{const r=data.rows.find(x=>x.id===b.dataset.promo);const box=document.createElement('div');box.className='acts';box.innerHTML=`<input value="${esc(r.promo||'')}" style="border:2px solid var(--line);border-radius:8px;padding:5px 10px;flex:1"><button class="btn sm primary">Сохранить</button>`;b.parentNode.after(box);box.querySelector('button').onclick=()=>{const v=box.querySelector('input').value.trim().toUpperCase();change(d=>{const x=d.rows.find(y=>y.id===r.id);x.promo=v},'промокод '+v)}});
+}
+$('#ordC').onclick=()=>$('#ord').close();
+$('#ordS').onclick=()=>{const a=+$('#ordA').value||0,k=$('#ordK').value;$('#ord').close();setSt(pending,'order','order',{amount:a,order_kind:k})};
+$('#refC').onclick=()=>$('#ref').close();
+$('#refS').onclick=()=>{const k=$('#refK').value,c=$('#refN').value.trim();$('#ref').close();change(d=>{const r=d.rows.find(x=>x.id===pending);r.referrals=r.referrals||[];r.referrals.push({date:today(),kind:k,client:c,payout_paid:''})},'клиент по промокоду')};
+$('#impC').onclick=()=>$('#imp').close();
+$('#impS').onclick=()=>{let arr;try{arr=JSON.parse($('#impT').value.trim());if(!Array.isArray(arr))arr=arr.rows||[arr]}catch(e){toast('Это не JSON, проверь, что скопировано целиком',true);return}
+  const have=new Set(data.rows.map(r=>normAcc(r.account)));let add=[],skip=0;const t=today();
+  let mx=Math.max(0,...data.rows.map(r=>+String(r.id).replace(/\D/g,'')||0));
+  for(const r of arr){const a=normAcc(r.account||r.url);if(!a||have.has(a)){skip++;continue}have.add(a);add.push(Object.assign({type:'client',status:'found',found:t,follow_plan:t,followed:'',sent:'',reminded:'',replied:'',call:'',order:'',amount:0,notes:''},r,{id:'r'+String(++mx).padStart(3,'0'),account:'@'+a,url:r.url||`https://www.instagram.com/${a}/`}))}
+  $('#imp').close();if(!add.length){toast(`Новых нет, пропущено ${skip}`);return}
+  change(d=>{const h=new Set(d.rows.map(r=>normAcc(r.account)));add.forEach(r=>{if(!h.has(normAcc(r.account)))d.rows.push(r)})},`добавлено ${add.length}`);toast(`Добавлено ${add.length}, пропущено ${skip}`)};
+const dlg=$('#dlg');
+$('#setBtn').onclick=()=>{$('#tok').value='';dlg.showModal()};$('#tCancel').onclick=()=>dlg.close();
+$('#tOff').onclick=()=>{ls.del('gh_token');token=null;dlg.close();setSync();load()};
+$('#tSave').onclick=async()=>{const v=$('#tok').value.trim();if(!v)return;token=v;try{await ghGet();ls.set('gh_token',v);dlg.close();toast('Синхронизация включена');load()}catch(e){token=ls.get('gh_token');toast('Ключ не подошёл: '+e.message,true)}};
+load();setInterval(()=>{if(data)render()},300000);
+</script>
+</body>
+</html>

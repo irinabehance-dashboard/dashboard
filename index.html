@@ -148,7 +148,7 @@ dialog::backdrop{background:rgba(14,14,14,.6)}
 <header class="top"><div class="top-in">
   <div class="brand">Контент-центр <b>Ирины</b></div>
   <div class="counters" id="counters"></div>
-  <div class="sync"><span class="dot" id="sdot"></span><span id="stext">Загрузка…</span><button class="btn" id="setBtn">Синхронизация</button></div>
+  <div class="sync"><a class="btn" href="outreach.html" style="text-decoration:none">Рассылки</a><span class="dot" id="sdot"></span><span id="stext">Загрузка…</span><button class="btn" id="setBtn">Синхронизация</button></div>
 </div></header>
 
 <main>
@@ -197,7 +197,7 @@ dialog::backdrop{background:rgba(14,14,14,.6)}
 <script>
 const OWNER='irinabehance-dashboard', REPO='dashboard', PATH='data.json';
 const API=`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
-const PL={'ig-post':['Instagram · пост','p-ig'],'ig-stories':['Instagram · сторис','p-ig'],'ig-reels':['Instagram · рилс','p-ig'],'tg':['Telegram','p-tg'],'threads':['Threads','p-threads'],'profile':['Профиль','p-profile']};
+const PL={'ig-post':['Instagram · пост','p-ig'],'ig-stories':['Instagram · сторис','p-ig'],'ig-reels':['Instagram · рилс','p-ig'],'tg':['Telegram · ВК','p-tg'],'threads':['Threads','p-threads'],'profile':['Профиль','p-profile']};
 const ST={plan:['В плане','b-plan'],scheduled:['Запланировано','b-sch'],done:['Выставлено','b-done'],moved:['Перенести','b-moved']};
 function dueAt(i){const m=/^(\d{1,2}):(\d{2})/.exec(i.time||'');const hh=m?m[1].padStart(2,'0'):'23',mm=m?m[2]:'59';return new Date(`${i.date}T${hh}:${mm}:00+07:00`)}
 function eff(i){return i.status==='scheduled'&&Date.now()>=dueAt(i).getTime()?'done':i.status}

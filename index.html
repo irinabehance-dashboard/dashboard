@@ -63,6 +63,9 @@ h1{font-size:clamp(34px,5vw,62px);line-height:.97;letter-spacing:-.035em;margin:
 .day.empty{background:transparent;border-style:dashed;cursor:default;min-height:0;opacity:.55}
 .day.empty:hover{transform:none;box-shadow:none}
 .day.today{box-shadow:0 0 0 3px var(--ink)}
+.day.past{min-height:0;align-self:start;padding:10px 14px;background:transparent;border:1px solid var(--line);opacity:.6}
+.day.past:hover{opacity:1}
+.day.past .dn{font-size:20px}
 .day.dim{opacity:.35}
 .dh{display:flex;align-items:baseline;gap:8px}
 .dn{font-size:19px;font-weight:600;white-space:nowrap}
@@ -246,6 +249,7 @@ function render(){
     const el=document.createElement('button');el.type='button';
     if(!info&&!its.length){el.className='day empty';el.disabled=true;el.innerHTML=`<div class="dh"><span class="dn">${d.getUTCDate()}</span><span class="dw">${WD[d.getUTCDay()]}</span></div>`;g.appendChild(el);continue}
     const vis=its.filter(passes),dn=its.filter(i=>eff(i)==='done').length,m=its.filter(i=>i.status==='moved').length;
+    if(ds<todayStr){el.className='day past'+(filt&&!vis.length?' dim':'');el.title='Прошедший день, нажми, чтобы посмотреть';el.innerHTML=`<div class="dh"><span class="dn">${d.getUTCDate()}<small>${MON[d.getUTCMonth()].slice(0,3)}</small></span><span class="dw">${WD[d.getUTCDay()]}</span></div>`;el.onclick=()=>openDay(ds);g.appendChild(el);continue}
     const plats=[...new Set(its.map(i=>i.platform))];
     el.className='day '+(info?.type||'')+(its.length&&dn===its.length?' complete':'')+(ds===todayStr?' today':'')+(filt&&!vis.length?' dim':'');
     el.innerHTML=`<div class="dh"><span class="dn">${d.getUTCDate()}<small>${MON[d.getUTCMonth()].slice(0,3)}</small></span><span class="dtype">${info?.type==='main'?'основной':'лайт'}</span></div><div class="dw">${WD[d.getUTCDay()]}${ds===todayStr?' · сегодня':''}</div>

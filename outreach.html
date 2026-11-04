@@ -100,7 +100,7 @@ dialog textarea{min-height:200px;font-family:ui-monospace,Menlo,monospace;font-s
 <main>
   <div class="eyebrow">Instagram · клиенты и партнёры</div>
   <h1>Рассылки</h1>
-  <p class="lead">Каждый будний день 10 подписок. Через 2 дня сообщение с картинкой ниши. Через 3 дня без ответа одно напоминание. После ответа второе сообщение со ссылкой на страницу ниши. Не ответили за 14 дней, отписываемся.</p>
+  <p class="lead">Каждый будний день 10 подписок. Через 2 дня сообщение с картинкой ниши. Через 2 дня без ответа одно напоминание. Через 3 дня после напоминания без ответа отписываемся. После ответа второе сообщение со ссылкой на страницу ниши.</p>
   <div class="banner" id="banner">Синхронизация выключена, отметки сохраняются только на этом устройстве. Нажми «Синхронизация» и вставь тот же ключ GitHub, что в контент-плане. Если ключ уже вводила там, он подхватится сам.</div>
   <div class="tabs" id="tabs"></div>
   <div id="view"></div>
@@ -131,7 +131,7 @@ function toast(m,err){const t=$('#toast');t.textContent=m;t.className='toast sho
 function setSync(){$('#sdot').className='dot'+(token?' on':'');$('#stext').textContent=token?'Синхронизация включена':'Только это устройство';$('#banner').classList.toggle('show',!token)}
 
 /* effective status: auto «нет ответа» через 5 дней после напоминания */
-function eff(r){if(r.status==='reminded'&&r.reminded&&days(r.reminded,today())>=5)return'silent';return r.status}
+function eff(r){if(r.status==='reminded'&&r.reminded&&days(r.reminded,today())>=3)return'silent';return r.status}
 function niche(n){return (data.niches||[]).find(x=>x.niche===n)||{}}
 
 async function ghGet(){const r=await fetch(API+'?ref=main&t='+Date.now(),{headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json'},cache:'no-store'});if(!r.ok)throw new Error('GitHub '+r.status);const j=await r.json();return{data:JSON.parse(b64d(j.content)),sha:j.sha}}
@@ -204,14 +204,14 @@ function vToday(){
   const t=today(),R=data.rows;
   const fol=R.filter(r=>eff(r)==='found'&&(!r.follow_plan||r.follow_plan<=t)).sort((a,b)=>(a.type>b.type?1:-1));
   const wr=R.filter(r=>eff(r)==='followed'&&r.followed&&days(r.followed,t)>=2);
-  const rem=R.filter(r=>eff(r)==='sent'&&r.sent&&days(r.sent,t)>=3);
+  const rem=R.filter(r=>eff(r)==='sent'&&r.sent&&days(r.sent,t)>=2);
   const rep=R.filter(r=>eff(r)==='replied');
-  const unf=R.filter(r=>['silent','declined'].includes(eff(r))&&r.followed&&!r.unfollowed&&days(r.followed,t)>=14);
+  const unf=R.filter(r=>['silent','declined'].includes(eff(r))&&r.followed&&!r.unfollowed);
   const B=[['Ответили','Скопируй второе сообщение со ссылкой и отправь. Если вопрос нестандартный, перешли ответ ChatGPT.',rep,'reply'],
    ['Написать','Подписка была 2 дня назад. Отправь сообщение и прикрепи картинку ниши.',wr,'write'],
-   ['Напомнить','Написали 3 дня назад, ответа нет. Одно напоминание, больше не пишем.',rem,'remind'],
+   ['Напомнить','Написали 2 дня назад, ответа нет. Одно напоминание, больше не пишем.',rem,'remind'],
    ['Подписаться','Подпишись и поставь лайк 1–2 постам. Через 2 дня они появятся в «Написать».',fol,'follow',15],
-   ['Отписаться','Не ответили или отказались, подписка больше 14 дней.',unf,'unf']];
+   ['Отписаться','Нет ответа через 3 дня после напоминания или отказ. Отпишись и нажми «Отписалась».',unf,'unf']];
   const full=B.filter(b=>b[2].length),emp=B.filter(b=>!b[2].length);
   $('#view').innerHTML=(full.length?full.map(b=>block(...b)).join(''):'<div class="empty">На сегодня всё сделано</div>')+(emp.length?`<p class="hint" style="margin-top:8px">Пусто сегодня ${emp.map(b=>'«'+b[0]+'»').join(', ')}</p>`:'');
 }

@@ -100,7 +100,7 @@ dialog textarea{min-height:200px;font-family:ui-monospace,Menlo,monospace;font-s
 <main>
   <div class="eyebrow">Instagram · клиенты и партнёры</div>
   <h1>Рассылки</h1>
-  <p class="lead">Каждый будний день 10 подписок. Через 2 дня сообщение с картинкой ниши. Через 2 дня без ответа одно напоминание. Через 3 дня после напоминания без ответа отписываемся. После ответа второе сообщение со ссылкой на страницу ниши.</p>
+  <p class="lead">Рассылки с понедельника по четверг, 10 подписок в день. Всё, что выпадает на пятницу, субботу или воскресенье, переносится на понедельник. Через 2 дня после подписки сообщение с картинкой ниши. Через 2 дня без ответа одно напоминание. Через 3 дня после напоминания без ответа отписываемся. После ответа второе сообщение со ссылкой на страницу ниши.</p>
   <div class="banner" id="banner">Синхронизация выключена, отметки сохраняются только на этом устройстве. Нажми «Синхронизация» и вставь тот же ключ GitHub, что в контент-плане. Если ключ уже вводила там, он подхватится сам.</div>
   <div class="tabs" id="tabs"></div>
   <div id="view"></div>
@@ -130,7 +130,13 @@ let data=null,token=ls.get('gh_token'),tab=ls.get('out_tab')||'today',saving=Pro
 function toast(m,err){const t=$('#toast');t.textContent=m;t.className='toast show'+(err?' err':'');clearTimeout(t._h);t._h=setTimeout(()=>t.className='toast',2600)}
 function setSync(){$('#sdot').className='dot'+(token?' on':'');$('#stext').textContent=token?'Синхронизация включена':'Только это устройство';$('#banner').classList.toggle('show',!token)}
 
-/* effective status: auto «нет ответа» через 5 дней после напоминания */
+/* рабочие дни рассылок пн–чт; всё, что выпадает на пт, сб, вс, переносится на понедельник */
+const wday=d=>new Date(d+'T12:00:00').getDay();
+const isOff=d=>[5,6,0].includes(wday(d));
+const addD=(d,n)=>{const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+n);return x.toLocaleDateString('sv-SE')};
+const work=d=>{while(isOff(d))d=addD(d,1);return d};
+const due=(d,n)=>work(addD(d,n));
+/* effective status: «нет ответа» через 3 дня после напоминания */
 function eff(r){if(r.status==='reminded'&&r.reminded&&days(r.reminded,today())>=3)return'silent';return r.status}
 function niche(n){return (data.niches||[]).find(x=>x.niche===n)||{}}
 
@@ -200,18 +206,28 @@ function block(title,hint,list,stage,limit){
   const shown=limit?list.slice(0,limit):list;
   return `<section class="blk"><h2>${title}<span class="n">${list.length}</span></h2><p class="hint">${hint}</p>${shown.length?`<div class="cards">${shown.map(r=>card(r,stage)).join('')}</div>`:'<div class="empty">Сегодня здесь пусто</div>'}${limit&&list.length>limit?`<p class="hint">И ещё ${list.length-limit} на следующие дни</p>`:''}</section>`;
 }
+let forceFollow=false;
 function vToday(){
-  const t=today(),R=data.rows;
+  const t=today(),R=data.rows,off=isOff(t);
   const fol=R.filter(r=>eff(r)==='found'&&(!r.follow_plan||r.follow_plan<=t)).sort((a,b)=>(a.type>b.type?1:-1));
-  const wr=R.filter(r=>eff(r)==='followed'&&r.followed&&days(r.followed,t)>=2);
-  const rem=R.filter(r=>eff(r)==='sent'&&r.sent&&days(r.sent,t)>=2);
+  const wr=R.filter(r=>eff(r)==='followed'&&r.followed&&due(r.followed,2)<=t);
+  const rem=R.filter(r=>eff(r)==='sent'&&r.sent&&due(r.sent,2)<=t);
   const rep=R.filter(r=>eff(r)==='replied');
   const unf=R.filter(r=>['silent','declined'].includes(eff(r))&&r.followed&&!r.unfollowed);
   const B=[['Ответили','Скопируй второе сообщение со ссылкой и отправь. Если вопрос нестандартный, перешли ответ ChatGPT.',rep,'reply'],
-   ['Написать','Подписка была 2 дня назад. Отправь сообщение и прикрепи картинку ниши.',wr,'write'],
+   ['Написать','Подписка была 2 дня назад, если срок выпал на пт–вс, он переехал на понедельник. Отправь сообщение и прикрепи картинку ниши.',wr,'write'],
    ['Напомнить','Написали 2 дня назад, ответа нет. Одно напоминание, больше не пишем.',rem,'remind'],
-   ['Подписаться','Подпишись и поставь лайк 1–2 постам. Через 2 дня они появятся в «Написать».',fol,'follow',15],
+   ['Подписаться','Подпишись и поставь лайк 1–2 постам. Через 2 дня они появятся в «Написать», с пт–вс переносится на понедельник.',fol,'follow',30],
    ['Отписаться','Нет ответа через 3 дня после напоминания или отказ. Отпишись и нажми «Отписалась».',unf,'unf']];
+  if(off){
+    const mon=work(t);
+    const wrM=R.filter(r=>eff(r)==='followed'&&r.followed&&due(r.followed,2)<=mon),remM=R.filter(r=>eff(r)==='sent'&&r.sent&&due(r.sent,2)<=mon);
+    const moved=[['написать',wrM],['напомнить',remM],['подписаться',fol],['отписаться',unf]].filter(x=>x[1].length);
+    const show=B.filter(b=>b[3]==='reply'&&b[2].length||(forceFollow&&b[3]==='follow'&&b[2].length));
+    $('#view').innerHTML=`<section class="blk"><h2>Пт, сб и вс без рассылок</h2><p class="hint">${moved.length?'Перенесено на '+fmt(mon)+' '+moved.map(x=>x[0]+' '+x[1].length).join(', ')+'. В понедельник может быть больше 10 человек, это нормально.':'Всё сделано, отдыхай.'} Отвечать тем, кто написал сам, можно в любой день.</p>${fol.length&&!forceFollow?'<div class="acts"><button class="btn sm" id="ffB">Всё равно подписаться сегодня</button></div>':''}</section>`+show.map(b=>block(...b)).join('');
+    const f=$('#ffB');if(f)f.onclick=()=>{forceFollow=true;render()};
+    return;
+  }
   const full=B.filter(b=>b[2].length),emp=B.filter(b=>!b[2].length);
   $('#view').innerHTML=(full.length?full.map(b=>block(...b)).join(''):'<div class="empty">На сегодня всё сделано</div>')+(emp.length?`<p class="hint" style="margin-top:8px">Пусто сегодня ${emp.map(b=>'«'+b[0]+'»').join(', ')}</p>`:'');
 }

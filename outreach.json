@@ -468,10 +468,10 @@
   },
   {
    "type": "client",
-   "status": "found",
+   "status": "followed",
    "found": "2026-11-07",
    "follow_plan": "2026-11-07",
-   "followed": "",
+   "followed": "2026-11-07",
    "sent": "",
    "reminded": "",
    "replied": "",

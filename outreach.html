@@ -188,7 +188,8 @@ function card(r,stage){
   if(stage==='write')m=msgBox('Первое сообщение · прикрепи картинку «'+(r.image||n.image||'ниши')+'»',r.msg1,r.id,'msg1');
   if(stage==='remind')m=msgBox('Напоминание',r.followup,r.id,'followup');
   if(stage==='reply')m=msgBox('Второе сообщение со ссылкой',r.msg2,r.id,'msg2');
-  if(stage==='follow'&&r.detail)m=`<div class="msg"><span class="lbl">Деталь из профиля для сообщения</span>${esc(r.detail)}</div>`;
+  if(stage==='follow'&&r.found&&r.found<today())m=`<div class="note">Перенесён с ${fmt(r.found)}, подпишись сегодня</div>`;
+  if(stage==='follow'&&r.detail)m+=`<div class="msg"><span class="lbl">Деталь из профиля для сообщения</span>${esc(r.detail)}</div>`;
   if(r.notes)m=`<div class="note">${esc(r.notes)}</div>`+m;
   let b='';
   if(stage==='follow')b=btn(r.id,'followed','✓ Подписалась','primary')+btn(r.id,'declined','Не подходит');
@@ -208,7 +209,7 @@ function block(title,hint,list,stage,limit){
 }
 function vToday(){
   const t=today(),R=data.rows,off=isOff(t);
-  const fol=R.filter(r=>eff(r)==='found'&&(!r.follow_plan||r.follow_plan<=t)).sort((a,b)=>(a.type>b.type?1:-1));
+  const fol=R.filter(r=>eff(r)==='found'&&(!r.follow_plan||r.follow_plan<=t)).sort((a,b)=>String(a.found||'').localeCompare(String(b.found||''))||(a.type>b.type?1:-1));
   const wr=R.filter(r=>eff(r)==='followed'&&r.followed&&due(r.followed,2)<=t);
   const rem=R.filter(r=>eff(r)==='sent'&&r.sent&&due(r.sent,2)<=t);
   const rep=R.filter(r=>eff(r)==='replied');
@@ -216,7 +217,7 @@ function vToday(){
   const B=[['Ответили','Скопируй второе сообщение со ссылкой и отправь. Если вопрос нестандартный, перешли ответ ChatGPT.',rep,'reply'],
    ['Написать','Подписка была 2 дня назад, если срок выпал на выходные, он переехал на понедельник. Отправь сообщение и прикрепи картинку ниши.',wr,'write'],
    ['Напомнить','Написали 2 дня назад, ответа нет. Одно напоминание, больше не пишем.',rem,'remind'],
-   ['Подписаться','Подпишись и поставь лайк 1–2 постам. Через 2 дня они появятся в «Написать», с выходных переносится на понедельник.',fol,'follow',30],
+   ['Подписаться','Подпишись и поставь лайк 1–2 постам. Без отметки «Подписалась» аккаунт переходит на следующий день, перенесённые стоят первыми. Через 2 дня они появятся в «Написать», с выходных переносится на понедельник.',fol,'follow',30],
    ['Отписаться','Нет ответа через 3 дня после напоминания или отказ. Отпишись и нажми «Отписалась».',unf,'unf']];
   if(off){
     const mon=work(t);

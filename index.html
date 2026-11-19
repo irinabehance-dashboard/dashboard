@@ -79,6 +79,7 @@ h1{font-size:clamp(34px,5vw,62px);line-height:.97;letter-spacing:-.035em;margin:
 .p-ig{color:#A51650;background:#FFE0EC}
 .p-threads{color:#fff;background:#262626}
 .p-tg{color:#004D78;background:#D6EFFF}
+.p-vk{color:#0B3D91;background:#E3EBFF}
 .p-profile{color:var(--ink);background:#ECE7DF}
 .prog{font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:center}
 .bar{flex:1;height:4px;border-radius:4px;background:#ECE7DF;overflow:hidden}
@@ -158,12 +159,12 @@ dialog::backdrop{background:rgba(14,14,14,.6)}
   <div class="eyebrow">Календарь публикаций · Новосибирск UTC+7</div>
   <h1>Контент по дням</h1>
   <p class="lead">Нажми на день. Внутри площадки, тексты, сценарии и отметки. Поставила в автопостинг, жми «Запланировано», в назначенное время пост сам станет «Выставлено».</p>
-  <div class="rules"><span class="rule">Основные дни — оранжевой рамкой</span><span class="rule">Выходные — лайтово</span><span class="rule">Личная сторис всегда в паре с рабочей</span><span class="rule">Отмечаем только то, что реально вышло</span><span class="rule">Живые сторис без рамок</span><span class="rule">Тексты по-человечески, без двоеточий и тире</span><span class="rule">Сначала Instagram, в тот же или на следующий день дубль в Telegram и ВК</span></div>
+  <div class="rules"><span class="rule">Основные дни — оранжевой рамкой</span><span class="rule">Выходные — лайтово</span><span class="rule">Личная сторис всегда в паре с рабочей</span><span class="rule">Отмечаем только то, что реально вышло</span><span class="rule">Живые сторис без рамок</span><span class="rule">Тексты по-человечески, без двоеточий и тире</span><span class="rule">ВК как Instagram, только «в сообщения»</span><span class="rule">Telegram свой текст, подробнее, без рилсов</span><span class="rule">Пока догоняем, Telegram и ВК утром и вечером</span></div>
   <div class="banner" id="banner">Отметки сейчас сохраняются только на этом устройстве. Подключи синхронизацию (кнопка вверху), чтобы видеть их везде.</div>
   <div class="weeks" id="weeks"></div>
   <div class="toolbar">
     <select id="fPlat" aria-label="Площадка">
-      <option value="">Все площадки</option><option value="ig">Instagram</option><option value="ig-reels">Только рилсы</option><option value="tg">Telegram</option><option value="threads">Threads</option><option value="profile">Задачи по профилю</option>
+      <option value="">Все площадки</option><option value="ig">Instagram</option><option value="ig-reels">Только рилсы</option><option value="tg">Telegram</option><option value="vk">ВКонтакте</option><option value="threads">Threads</option><option value="profile">Задачи по профилю</option>
     </select>
     <select id="fStat" aria-label="Статус">
       <option value="">Все статусы</option><option value="plan">В плане</option><option value="scheduled">Запланировано</option><option value="done">Выставлено</option><option value="moved">Перенести</option>
@@ -200,7 +201,7 @@ dialog::backdrop{background:rgba(14,14,14,.6)}
 <script>
 const OWNER='irinabehance-dashboard', REPO='dashboard', PATH='data.json';
 const API=`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
-const PL={'ig-post':['Instagram · пост','p-ig'],'ig-stories':['Instagram · сторис','p-ig'],'ig-reels':['Instagram · рилс','p-ig'],'tg':['Telegram · ВК','p-tg'],'threads':['Threads','p-threads'],'profile':['Профиль','p-profile']};
+const PL={'ig-post':['Instagram · пост','p-ig'],'ig-stories':['Instagram · сторис','p-ig'],'ig-reels':['Instagram · рилс','p-ig'],'tg':['Telegram','p-tg'],'vk':['ВКонтакте','p-vk'],'threads':['Threads','p-threads'],'profile':['Профиль','p-profile']};
 const ST={plan:['В плане','b-plan'],scheduled:['Запланировано','b-sch'],done:['Выставлено','b-done'],moved:['Перенести','b-moved']};
 function dueAt(i){const m=/^(\d{1,2}):(\d{2})/.exec(i.time||'');const hh=m?m[1].padStart(2,'0'):'23',mm=m?m[2]:'59';return new Date(`${i.date}T${hh}:${mm}:00+07:00`)}
 function eff(i){return i.status==='scheduled'&&Date.now()>=dueAt(i).getTime()?'done':i.status}
